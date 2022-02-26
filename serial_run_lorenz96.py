@@ -26,6 +26,7 @@ import numpy as np
 import math as m
 import sys
 import os
+from time import time
 
 # NetCDF file writing package
 from netCDF4 import Dataset as ncopen
@@ -37,8 +38,8 @@ import L96_model as L96
 # ===================================================
 # Section 1: Load inputs from the command line
 # ===================================================
-ens_size = 10 #sys.argv[1]      # Ensemble size
-outfname = 'meow.nc' #sys.argv[2]      # Output netCDF file name
+ens_size = sys.argv[1]      # Ensemble size
+outfname = sys.argv[2]      # Output netCDF file name
 
 
 # ===================================================
@@ -47,15 +48,25 @@ outfname = 'meow.nc' #sys.argv[2]      # Output netCDF file name
 # Setup seed for NumPy's random number generator
 np.random.seed( os.getpid() )
 
+# Initialize timer to measure ens generation time
+time_start = time()
+
 # Generate a spun-up ensemble using function from L96_model.py
 ens_outcomes = L96.setup_ens( ens_size )
 
+# Compute time taken to generate ensemble
+time_taken = time() - time_start
+print("Code took %5.1f seconds to generate a %d-member ensemble"
+      % (time_taken, ens_size))
 
 # ===================================================
 # Section 3: Save ensemble into a netCDF4 file
 # ===================================================
 # Initialize file handler and buffer for the new netCDF4 file
 outfile = ncopen( outfname, 'w' )
+
+# Save time taken to run ens generation
+outfile.time_taken = 'Time to generate ensemble: %5.1f seconds' % time_taken
 
 # Initialize array dimensions
 outfile.createDimension('ens_mem_id', ens_size )

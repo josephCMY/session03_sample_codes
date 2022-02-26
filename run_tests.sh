@@ -1,43 +1,70 @@
 #!/bin/bash
-#####header for stampede######
-#SBATCH -J L96_tests
-#SBATCH -N 1
-#SBATCH -n 48
-#SBATCH -p skx-dev
-#SBATCH -t 00:30:00
-#SBATCH -o test.log
-#SBATCH -e test.err
+# ==============================================================================
+# Author: Man-Yau (Joseph) Chan
+# Date: 26 Feb 2022
+# =============================================================================
 
-# Script to run many iterations of testing to get statistically significant results
-# Parallelization control
+# =============================================================================
+# Description:
+# -----------------------------------------------------------------------------
+# Script to demonstrate the following two parallelization approaches
+# 1) Run multiple concurrent copies of a single-process program via a Bash
+#    for loop
+# 2) Using a parallelized program without involving a Bash script
+#
+# For this demonstration, I will be using the Lorenz 1996 wave-on-a-ring model.
+# The goal is to construct a 4000 member ensemble of forecast model outcomes.
+# Both parallelization approaches will be demonstrated and compared against a
+# single-process approach.
+# =============================================================================
+
+# =============================================================================
+# IMPORTANT NOTES:
+# -----------------------------------------------------------------------------
+# 1) This Bash script (run_tests.sh) must be called within a compute node.
+# 2) The parallelized program must be called with with some kind of MPI-running
+#    utility. This utility can be specified using the variable "MPI_RUNNER" on
+#    this Bash script. For SLURM HPCs, utility is typically either "ibrun",
+#    "srun" or "mpirun".
+#    I have set MPI_RUNNER=ibrun since I am using Stampede2 for this script.
+# ===========================================================================
+
+# Important variables:
+# --------------------
+MPI_RUNNER=ibrun
+PYTHON_RUNNER=python3
+
+
+# PART 1: Generating 4000-member ensemble using only a single process.
+# -------------------------------------------------------------------
+# Print current time and date out
+echo `date`':' "Running single-process ensemble generation"
+
+# Run the python code to generate a 4000-member ens
+$PYTHON_RUNNER serial_run_lorenz96.py 4000 single_proc_L96_ens.nc
+
+# Print current time and date to sceen
+echo `date`':' "Finished running single-process ensemble generation"
 
 
 
-ntid=40
-tid=0
-intlist="8" #"4 6 8 10 12 14 16"
-ointlist="1 2 4"
+# PART 2: Generate ensemble using the Bash for-loop parallelization approach
+# ---------------------------------------------------------------------------
+# Print current time and date out
+echo `date`':' "Generating ensemble using the Bash parallelization approach"
 
-# Run many iterations
-for oint in $ointlist; do
-  for nint in $intlist; do
-    echo Running cyc_int $nint obs_int $oint
-    for ii in `seq -f "%04g" 1 40`; do
-      python3 sensitivity_runs.py $nint $oint $ii >& log.$nint'_'$oint'_'$ii &
-      tid=$(($tid+1))
-      if [[ $tid == $ntid ]]; then
-        wait
-        tid=0
-      fi
-    done
-  done
+# Evoking 20 copies of the serial Python code
+for iter in `seq -f "%02g" 1 20`; do
+  $PYTHON_RUNNER serial_run_lorenz96.py 200 bash_L96_ens_"$iter".nc >& log.$iter &
 done
-# Wait for parallel threads to complete
+
+# Wait for all 20 copies to finish running
 wait
 
+# Print current time and date out
+echo `date`':' "Generated ensemble using the Bash parallelization approach"
 
-mkdir all_sensitivities
-mv log* all_sensitivities
-mv *npy all_sensitivities
 
-exit
+
+# PART3: Generate ensemble using a parallelized Python code
+# ----------------------------------------------------------
