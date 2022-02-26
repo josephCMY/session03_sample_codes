@@ -68,3 +68,11 @@ echo `date`':' "Generated ensemble using the Bash parallelization approach"
 
 # PART3: Generate ensemble using a parallelized Python code
 # ----------------------------------------------------------
+# Print current time and date out
+echo `date`':' "Generating ensemble using the direct parallelization approach"
+
+# Run parallelized Python code
+$MPI_RUNNER $PYTHON_RUNNER parallel_run_lorenz96.py 4000 mpi4py_L96_ens.nc
+
+# Print current time and date out
+echo `date`':' "Generated ensemble using the direct parallelization approach"
