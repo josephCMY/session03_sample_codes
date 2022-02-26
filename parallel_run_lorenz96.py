@@ -98,6 +98,8 @@ time_taken = time() - time_start
 # Initialize array to hold all created members at root process
 if my_proc_id == 0:
   overflow_ens = np.zeros( [overflow_ens_size, 40], dtype='f' )
+else:
+  overflow_ens = None
 
 # Gather members to root process
 comm.Gather( ens_outcomes, overflow_ens, root = 0)
