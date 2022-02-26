@@ -113,7 +113,7 @@ comm.Gather( ens_outcomes, overflow_ens, root = 0)
 if my_proc_id == 0:
 
   # Saving only the desired number of ensemble members
-  ens_outcome = overflow_ens[0:ens_size,:]
+  ens_outcomes = overflow_ens[0:ens_size,:]
 
   # Initialize file handler and buffer for the new netCDF4 file
   outfile = ncopen( outfname, 'w' )
