@@ -27,9 +27,6 @@ import math as m
 import sys
 import os
 
-# Package to track wall clock time used for running
-from time import time
-
 # NetCDF file writing package
 from netCDF4 import Dataset as ncopen
 
@@ -40,8 +37,8 @@ import L96_model as L96
 # ===================================================
 # Section 1: Load inputs from the command line
 # ===================================================
-ens_size = sys.argv[1]      # Ensemble size
-outfname = sys.argv[2]      # Output netCDF file name
+ens_size = 10 #sys.argv[1]      # Ensemble size
+outfname = 'meow.nc' #sys.argv[2]      # Output netCDF file name
 
 
 # ===================================================
@@ -77,3 +74,8 @@ gridpt[:] = np.arange(40) + 1
 # Adding ensemble outcomes to netCDF4 file
 ens_store = outfile.createVariable('L96 ENSEMBLE','f4',
                                    ('ens_mem_id','L96_gridpt',) )
+ens_store.description = 'Ensemble of Lorenz 1996 model outcomes'
+ens_store[:] = ens_outcomes*1.
+
+# Save and close the netCDF4 file
+outfile.close()
