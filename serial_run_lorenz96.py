@@ -38,8 +38,8 @@ import L96_model as L96
 # ===================================================
 # Section 1: Load inputs from the command line
 # ===================================================
-ens_size = sys.argv[1]      # Ensemble size
-outfname = sys.argv[2]      # Output netCDF file name
+ens_size = int(sys.argv[1])   # Ensemble size
+outfname = sys.argv[2]        # Output netCDF file name
 
 
 # ===================================================
