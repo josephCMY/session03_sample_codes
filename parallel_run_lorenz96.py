@@ -97,7 +97,7 @@ time_taken = time() - time_start
 # ============================================================
 # Initialize array to hold all created members at root process
 if my_proc_id == 0:
-  overflow_ens = np.zeros( [overflow_ens_size, 40], dtype='f' )
+  overflow_ens = np.zeros( [overflow_ens_size, 40] ) *1.
 else:
   overflow_ens = None
 
