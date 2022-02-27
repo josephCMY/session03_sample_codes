@@ -51,7 +51,7 @@ echo `date`':' "Finished running single-process ensemble generation"
 # PART 2: Generate ensemble using the Bash for-loop parallelization approach
 # ---------------------------------------------------------------------------
 # Print current time and date out
-echo `date`':' "Generating ensemble using the Bash parallelization approach"
+echo `date`':' "Generating ensemble using Bash wrapper parallelization"
 
 # Evoking 20 copies of the serial Python code
 for iter in `seq -f "%02g" 1 20`; do
@@ -62,17 +62,17 @@ done
 wait
 
 # Print current time and date out
-echo `date`':' "Generated ensemble using the Bash parallelization approach"
+echo `date`':' "Generated ensemble using Bash wrapper parallelization"
 
 
 
 # PART 3: Generate ensemble using a parallelized Python code
 # ----------------------------------------------------------
 # Print current time and date out
-echo `date`':' "Generating ensemble using the direct parallelization approach"
+echo `date`':' "Generating ensemble using explicit parallelization"
 
 # Run parallelized Python code
 $MPI_RUNNER -n 20 $PYTHON_RUNNER parallel_run_lorenz96.py 4000 mpi4py_L96_ens.nc
 
 # Print current time and date out
-echo `date`':' "Generated ensemble using the direct parallelization approach"
+echo `date`':' "Generated ensemble using explicit parallelization"
