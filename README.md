@@ -17,7 +17,7 @@ single-process approach.
 
 
 ## IMPORTANT NOTES
-1) This Bash script (run_demonstrations.sh) must be called within a compute node.
+1) The Bash script (`run_demonstrations.sh`) must be called within a compute node.
 2) The parallelized program must be called with with some kind of MPI-running
    utility. This utility can be specified using the variable "MPI_RUNNER" on
    this Bash script. For SLURM HPCs, utility is typically either "ibrun",
