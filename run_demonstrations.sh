@@ -38,6 +38,7 @@ PYTHON_RUNNER=python3
 # PART 1: Generating 4000-member ensemble using only a single process.
 # -------------------------------------------------------------------
 # Print current time and date out
+echo ""
 echo `date`':' "Running single-process ensemble generation"
 
 # Run the python code to generate a 4000-member ens
@@ -51,6 +52,7 @@ echo `date`':' "Finished running single-process ensemble generation"
 # PART 2: Generate ensemble using the Bash for-loop parallelization approach
 # ---------------------------------------------------------------------------
 # Print current time and date out
+echo ""
 echo `date`':' "Generating ensemble using Bash wrapper parallelization"
 
 # Evoking 20 copies of the serial Python code
@@ -69,6 +71,7 @@ echo `date`':' "Generated ensemble using Bash wrapper parallelization"
 # PART 3: Generate ensemble using a parallelized Python code
 # ----------------------------------------------------------
 # Print current time and date out
+echo ""
 echo `date`':' "Generating ensemble using explicit parallelization"
 
 # Run parallelized Python code
