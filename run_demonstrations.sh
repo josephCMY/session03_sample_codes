@@ -79,3 +79,4 @@ $MPI_RUNNER -n 20 $PYTHON_RUNNER parallel_run_lorenz96.py 4000 mpi4py_L96_ens.nc
 
 # Print current time and date out
 echo `date`':' "Generated ensemble using explicit parallelization"
+echo ""
